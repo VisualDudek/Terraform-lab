@@ -30,7 +30,10 @@
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
-                "terminal.integrated.defaultProfile.linux": "zsh"
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "dotfiles.repository": "https://github.com/VisualDudek/dotfiles.git",
+                "dotfiles.targetPath": "~/dotfiles/",
+                "dotfiles.installCommand": "TerraformZsh/install.sh"
 			},
 			"extensions": [
 				"hashicorp.hcl"
