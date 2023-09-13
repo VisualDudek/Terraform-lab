@@ -1,4 +1,5 @@
 {
+    "name": "Terraform dev",
     "build": {
         "dockerfile": "./Dockerfile",
         "context": "."
@@ -16,7 +17,11 @@
         "ghcr.io/devcontainers/features/git:1": {
             "version": "latest",
             "ppa": "false"
-        }
+        },
+        "ghcr.io/devcontainers/features/aws-cli:1": {},
+        "ghcr.io/devcontainers-contrib/features/ansible:2": {},
+        "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:1": {},
+        "ghcr.io/devcontainers/features/terraform:1": {}
     },
 	// Configure tool-specific properties.
 	"customizations": {
@@ -24,8 +29,12 @@
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python"
-			}
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+                "terminal.integrated.defaultProfile.linux": "zsh"
+			},
+			"extensions": [
+				"hashicorp.hcl"
+			]
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -35,5 +44,10 @@
 	// "postCreateCommand": "pip3 install --user -r requirements.txt",
 
 	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
+	"remoteUser": "vscode",
+
+	// mount AWS credentions
+	"mounts": [
+		"source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
+	]
 }
