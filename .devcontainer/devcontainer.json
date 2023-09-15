@@ -1,9 +1,10 @@
 {
     "name": "Terraform dev",
-    "build": {
-        "dockerfile": "./Dockerfile",
-        "context": "."
-    },
+    // "build": {
+    //     "dockerfile": "./Dockerfile",
+    //     "context": "."
+    // },
+    "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2":{
             "installZsh": "true",
@@ -12,8 +13,8 @@
             "userGid": "1000",
             "upgradePackages": "true"
         },
-        "ghcr.io/devcontainers/features/python:1": "none",
-        "ghcr.io/devcontainers/features/node:1": "none",
+        // "ghcr.io/devcontainers/features/python:1": "none",
+        // "ghcr.io/devcontainers/features/node:1": "none",
         "ghcr.io/devcontainers/features/git:1": {
             "version": "latest",
             "ppa": "false"
@@ -22,7 +23,8 @@
         "ghcr.io/devcontainers-contrib/features/ansible:2": {},
         "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:1": {},
         "ghcr.io/devcontainers/features/terraform:1": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {}
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers-contrib/features/packer-asdf:2": {}
     },
 	// Configure tool-specific properties.
 	"customizations": {
