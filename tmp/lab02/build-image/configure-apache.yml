@@ -1,0 +1,27 @@
+---
+- name: Configure Apache
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Apache (rh)
+      ansible.builtin.yum:
+        name:
+          - "httpd-2.4.56-1.amzn2023"
+      when: ansible_facts['os_family'] == "RedHat"
+    - name: Install Apache (ubuntu)
+      ansible.builtin.apt:
+        name:
+          - "apache2"
+      when: ansible_facts['os_family'] == "Debian"
+    - name: Enable Apache service
+      vars:
+        service_name:
+          debian: apache2
+          redhat: httpd
+      ansible.builtin.service:
+        name: "{{ service_name[ansible_facts['os_family'] | lower] + '.service' }}"
+        enabled: true
+        state: started
+    - name: Create website
+      ansible.builtin.shell:
+        cmd: "echo '<h1>Hello from workshops Ansible and Packer ({{ ansible_facts['os_family'] }})!!!</h1>' > /var/www/html/index.html"
