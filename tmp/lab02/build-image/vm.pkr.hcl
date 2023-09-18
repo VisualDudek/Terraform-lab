@@ -27,7 +27,15 @@ locals {
 source "amazon-ebs" "amazon_linux_apache" {
   ami_name      = "${var.prefix}-amazon-linux-apache-${var.version}-${local.timestamp}"
   instance_type = "t3.micro"
-  source_ami    = "ami-057b6e529186a8233"
+  source_ami_filter {
+    filters = {
+      name = "al2023-ami-2023.1.20230912.0-kernel-6.1-x86_64"
+      virtualization-type = "hvm"
+    }
+    most_recent = true
+    owners = ["amazon"]
+  }
+  // source_ami    = "ami-057b6e529186a8233"
   ssh_username  = "ec2-user"
   tags = {
     purpose = "training"
@@ -44,6 +52,7 @@ source "amazon-ebs" "ubuntu_linux_apache" {
     most_recent = true
     owners      = ["099720109477"]
   }
+  // source_ami = "ami-01dd271720c1ba44f"
   ssh_username = "ubuntu"
   tags = {
     purpose = "training"
