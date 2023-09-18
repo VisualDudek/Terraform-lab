@@ -30,9 +30,10 @@ use `default_tags` in `provider "aws"` block
 
 **minimort** `default_tag`  is supported in all resources that implement tags, with the exception of the `aws_autoscaling_group` resource.
 
-### Task 5: Get latest Ubuntu AMI ID using Data Source
+### Task 5: Get latest Ubuntu AMI ID using Data Source using `aws_ami` block
 
 **minmort** why cannot filter by `root-device-type`? although `ec2 describe-images --image-ids ami-0989fb15ce71ba39e` shows this field as valid attribute of AMI Image
+
 
 # TODO
 
