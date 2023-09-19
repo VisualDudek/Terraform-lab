@@ -30,10 +30,48 @@ use `default_tags` in `provider "aws"` block
 
 **minimort** `default_tag`  is supported in all resources that implement tags, with the exception of the `aws_autoscaling_group` resource.
 
-### Task 5: Get latest Ubuntu AMI ID using Data Source using `aws_ami` block
+### Task 5: Get latest Ubuntu AMI ID using Data Source using `aws_ami` data block
 
 **minmort** why cannot filter by `root-device-type`? although `ec2 describe-images --image-ids ami-0989fb15ce71ba39e` shows this field as valid attribute of AMI Image
 
+### Task 6: Add locals and variables
+- add local `instance_type` and modify res. "aws_instance"
+MINDTHEGAP: `locals` but `local.[name]` without 's' and `variable` -> `var.[name]`
+- add variable `name_prefix` -> include this var into instance name
+- add variable `distro` with validation "ubuntu" or "amazon" only, use `condition` NOTE: you can include `${var.disto}` into error msg. -> alter instance name
+
+NOTE: do not provide vars in CLI use file `terraform.tfvars` or `terraform.auto.tfvars`
+- add `terraform.auto.tfvars` for "BP_training" project
+
+### Task 7: Create res. security group "allow_all"
+- create res. `aws_security_group` "allow_all"
+- attach security group to instance res.
+
+### Task 8: Use hcl function
+- create instance tag with value `timestamp()`
+
+### Task 9: Add terrafrom block
+- lock in provider version using "Version Constraints" 
+- if you want bump version -> you need to use `-upgrade` flag with `tfi`
+
+`~>` allows only the rightmost version component to increment
+
+**version constrains** [link](https://developer.hashicorp.com/terraform/language/expressions/version-constraints)
+
+### Task 10: Use Packer to build your ami
+- in subfolder `build-image` create `vm.pkr.hcl` build with custom `configure-apache.yml` ansible playbook
+- add `variables.auto.pkvr.hcl` for variables
+
+# MORT
+
+## not authorized to perfomr this operation
+```txt
+Error: reading EC2 AMIs: UnauthorizedOperation: You are not authorized to perform this operation.
+│       status code: 403, request id: bd422bf0-ba35-4014-b573-c47660bc9803
+```
+Run terraform in debug mode:
+`TF_LOG=debug terraform apply/plan`
+will get extend verbosity
 
 # TODO
 

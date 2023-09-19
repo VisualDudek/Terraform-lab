@@ -62,4 +62,12 @@ used block data for created ami in packer
 
 ### Terraform autovars
 cannot have ending `.hcl` as Packer
-only `tfvars`
+only `.tfvars`
+
+### Terraform state
+content of `terraform.tfstate` file
+all atributes from data block -> "aws_ami" 
+many interesting infomrations
+
+### Terraform priject/module idiomatic strucutre
+how to structure your Terraform projects?
