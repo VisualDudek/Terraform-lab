@@ -1,9 +1,17 @@
 terraform {
+  required_version = ">= 1.5.7"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+  }
+
+  backend "s3" {
+    bucket = "awsninja12"
+    dynamodb_table = "awsninja12"
+    region = "eu-west-1"
+    key = "state/terraform.tfstate"
   }
 }
 
@@ -18,85 +26,55 @@ provider "aws" {
   }
 }
 
-locals {
-  name_prefix = "awsninja12"
-  tag_key_name = "Name"
+module "web_server" {
+  source = "./modules/web-server"
+
+  app_version       = "v1.2.3"
+  distro            = "ubuntu"
+  number_of_servers = 1
+  vpc_id            = module.vpc.vpc_id
+  subnet_ids        = module.vpc.public_subnets
+}
+
+module "web_server_ubuntu" {
+  source = "./modules/web-server"
+
+  app_version       = "v1.2.3"
+  distro            = "ubuntu"
+  number_of_servers = 2
+  vpc_id            = module.vpc.vpc_id
+  subnet_ids        = module.vpc.public_subnets
+  name_prefix = "${var.name_prefix}-second-${terraform.workspace}"
+
+  count = var.ubuntu_enable == true ? 1 : 0
+}
+
+variable "ubuntu_enable" {
+  type = bool
+  default = true
 }
 
 variable "name_prefix" {
-  type = string
+  type    = string
   default = "awsninja12"
-  description = "Prefix added for name of every resource"
 }
 
-variable "number_of_servers" {
-  type = number
-  description = "Number of machines to create"
-  validation {
-    condition = var.number_of_servers > 0 && var.number_of_servers < 3
-    error_message = "Number of servers should be between 1-2 inclucive"
-  }
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+  version = "5.1.2"
+
+  name = var.name_prefix
+  cidr = "10.0.0.0/16"
+
+  azs                     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  private_subnets         = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets          = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  map_public_ip_on_launch = true
+
+  enable_nat_gateway = false
+  enable_vpn_gateway = false
 }
 
-variable "distro" {
-  type = string
-  validation {
-    condition = var.distro == "ubuntu" || var.distro == "amazon"
-    error_message = "Provide dostro: ubuntu or amazon, not ${var.distro}"
-  }
-}
-
-variable "app_version" {
-  type = string
-}
-
-data "aws_ami" "server_ami" {
-  filter {
-    name = "name"
-    values = ["${var.name_prefix}-${var.distro}-linux-apache-${var.app_version}-*"]
-  }
-  owners = [ "self" ]
-}
-
-resource "aws_instance" "app_server" {
-  instance_type = "t3.micro"
-  tags = {
-    "${local.tag_key_name}" = "${local.name_prefix}-web-server-${count.index}"
-  }
-  # ami      = "ami-01dd271720c1ba44f"
-  ami = data.aws_ami.server_ami.id
-  key_name = "shared-for-workshops"
-  vpc_security_group_ids = [
-    aws_security_group.allow_all.id
-  ]
-  count = var.number_of_servers
-}
-
-resource "aws_security_group" "allow_all" {
-  name = "${local.name_prefix}-allow-all"
-
-  ingress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-}
-
-output "server_ip" {
-  description = "Public IP of created server"
-  value = formatlist(
-    "Machine with name %s has public ip: %s",
-    aws_instance.app_server[*].tags["${local.tag_key_name}"],
-    aws_instance.app_server[*].public_ip,
-  )
+output "addreses" {
+  value = concat(module.web_server.server_ip, module.web_server_ubuntu[*].server_ip)
 }
