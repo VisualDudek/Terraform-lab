@@ -1,4 +1,6 @@
-spotkanie 2/3
+spotkanie 2/3 AND 3/3
+
+# 2/3
 
 ### `variable` block
 zmienne block `variable`
@@ -71,3 +73,43 @@ many interesting infomrations
 
 ### Terraform priject/module idiomatic strucutre
 how to structure your Terraform projects?
+
+# 3/3
+!!!Prezentacja
+
+terraform-docs -> check on gh
+
+`terrafrom fmt -recursive` recursive flag
+
+`tflint` also with `--recursive` flag
+
+`TF_LOG="trace"` the most verbose log
+
+link do artykułu Jakuba
+
+## terraform-docs
+
+## tflint
+
+## Modules
+can add modules from git or terrafrom registry
+
+need to `tfi` again, check `.terraform` dir and `modules` sub-dir
+
+### Terraform registry modules
+
+- AWS VPC Terraform module
+
+output modulu nie printuje sie na projekcie, need to create output on main and provide output from module
+
+- can copy module and rename "amz_web_server" -> quick reusable
+- `count` as zero -> meta if 
+
+- on output use `concat`
+
+!!! check .terraform/modules/vps
+
+## Backends
+S3 + DynamoDB
+
+## Workspaces

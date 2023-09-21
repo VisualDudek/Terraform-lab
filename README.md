@@ -16,3 +16,5 @@ based on [python dev container](https://github.com/devcontainers/images/tree/mai
 [dev Terraform](https://developer.hashicorp.com/terraform)
 [Terraform Config. Lang.](https://developer.hashicorp.com/terraform/language)
 [Terraform Registry](https://registry.terraform.io/)
+
+[Module Development](https://developer.hashicorp.com/terraform/language/modules/develop)

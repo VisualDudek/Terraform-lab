@@ -10,7 +10,7 @@ terraform {
 # --- ---
 
 provider "aws" {
-  default_tags {              # --- Task 4 ---
+  default_tags { # --- Task 4 ---
     tags = {
       tf_purpose = "training"
     }
@@ -18,19 +18,75 @@ provider "aws" {
 }
 
 resource "aws_instance" "amz_linux" {
-  instance_type = local.instance_type      # Task 6
+  instance_type = local.instance_type # Task 6
   # instance_type = "t3.micro"  
-  ami           = "ami-0b0d560d43e65a601"
+  ami = "ami-0b0d560d43e65a601"
 
   tags = {
-    Name = "${var.name_prefix}-${var.distro}-Example"        # Task 6
+    Name = "${var.name_prefix}-${var.distro}-Example" # Task 6
     # Name = "Example"
-    CreatedDate = timestamp()           # --- Task 8 ---
+    CreatedDate = timestamp() # --- Task 8 ---
   }
-  vpc_security_group_ids = [            
+  vpc_security_group_ids = [
     aws_security_group.allow_all.id
-  ]  # Task 7
+  ] # Task 7
+
+  count = 0 # Task 11
 }
+
+# --- Task 12 ---
+locals {
+ tag_key_name = "Name"
+}
+
+# Task 12: var
+variable "number_of_servers" {
+  type = number
+  default = 1
+  description = "Number of instances to create"
+  validation {
+    condition     = var.number_of_servers > 0 && var.number_of_servers < 3
+    error_message = "Number of servers should be between 1-2 inclucive"
+  }
+}
+
+# Task 12: var
+variable "image_version" {
+  type    = string
+}
+
+# Task 12: data "aws_ami"
+data "aws_ami" "server_ami" {
+  most_recent = true
+  filter {
+    name = "name"
+    values = ["${var.name_prefix}-${var.distro}-linux-apache-${var.image_version}-*"]
+  }
+  owners = [ "self" ]
+}
+
+# Task 12: ec2 instnace
+resource "aws_instance" "web-server" {
+  instance_type = local.instance_type
+  ami           = data.aws_ami.server_ami.id
+  count = var.number_of_servers
+
+  vpc_security_group_ids = [
+    aws_security_group.allow_all.id
+  ]
+
+  tags = {
+    (local.tag_key_name) = "${var.name_prefix}-${var.distro}-web-server-${count.index}"
+    CreatedDate = timestamp()
+  }
+}
+
+# Task 12: output
+output "web_server-server_ip" {
+  description = "Public IP of created WEB server"
+  value = aws_instance.amz_linux[*].public_ip
+}
+# --- ---
 
 # --- Task 6 ---
 locals {
@@ -38,15 +94,15 @@ locals {
 }
 
 variable "name_prefix" {
-  type = string
-  default = "awsninja12"
+  type        = string
+  default     = "awsninja12"
   description = "Prefix added for name of every resource"
 }
 
 variable "distro" {
   type = string
   validation {
-    condition = var.distro == "ubuntu" || var.distro == "amazon"
+    condition     = var.distro == "ubuntu" || var.distro == "amazon"
     error_message = "Provide dostro: ubuntu or amazon, not ${var.distro}"
   }
 }
@@ -54,7 +110,8 @@ variable "distro" {
 # --- Task 2 ---
 output "server_ip" {
   description = "Public IP of created server"
-  value       = aws_instance.amz_linux.public_ip
+  # value       = aws_instance.amz_linux.public_ip    
+  value = aws_instance.amz_linux[*].public_ip # Task 11
 }
 
 # --- Task 3 ---
@@ -70,17 +127,17 @@ output "ami_id_from_script" {
 # --- Task 5 ---
 data "aws_ami" "latest_ubunut" {
   most_recent = true
-  name_regex = "^ubuntu/images/hvm-ssd/ubuntu*"
+  name_regex  = "^ubuntu/images/hvm-ssd/ubuntu*"
   # name_regex = "^amazon/ubuntu/images/hvm-ssd/ubuntu*"
   owners = ["099720109477"]
 
   filter {
-    name = "virtualization-type"
+    name   = "virtualization-type"
     values = ["hvm"]
   }
-  
+
   filter {
-    name = "architecture"
+    name   = "architecture"
     values = ["x86_64"]
   }
 
