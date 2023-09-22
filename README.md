@@ -3,6 +3,9 @@ Terraform labs
 
 `.gitignore` based on gh best practice
 
+## Workspaces
+- interpolation seq. -> `${terraform.workspace}`
+
 ## devcontainer
 based on [python dev container](https://github.com/devcontainers/images/tree/main)
 
@@ -25,3 +28,10 @@ based on [python dev container](https://github.com/devcontainers/images/tree/mai
 
 [Module Development](https://developer.hashicorp.com/terraform/language/modules/develop)
 [Backend S3](https://developer.hashicorp.com/terraform/language/settings/backends/s3)
+[Managing Workspaces](https://developer.hashicorp.com/terraform/cli/workspaces)
+
+# Terraform Books
+- "Terraform: Up & Running, 3nd ed." 2022
+- "Terraform Cookbook" 2023
+- "Terraform in Action" 2021
+- "Practical GitOps: Infra. management using Terraform, AWS, and GitHub Actions" 2022
