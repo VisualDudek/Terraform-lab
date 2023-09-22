@@ -15,6 +15,12 @@ based on [python dev container](https://github.com/devcontainers/images/tree/mai
 - mount for AWS credentials and config (setup for local dev)
 - VS Code dotfiles fomr repo (awesome)
 
+# Discussion
+
+**Improving Code Quality** use following tools:
+- `tflint` - linter TODO: move comment on tflint from Lab/BP_training_backed Task 3 into DOCS tools section
+- `tflint-ruleset-aws` (plugin for tflint)
+
 # examples
 
 ## parmeter store
@@ -30,8 +36,15 @@ based on [python dev container](https://github.com/devcontainers/images/tree/mai
 [Backend S3](https://developer.hashicorp.com/terraform/language/settings/backends/s3)
 [Managing Workspaces](https://developer.hashicorp.com/terraform/cli/workspaces)
 
+## Terraform Tools
+[tflint](https://github.com/terraform-linters/tflint)
+[tflint-ruleset-aws](https://github.com/terraform-linters/tflint-ruleset-aws)
+
+## Terraform Blogs/Articles
+[Spacelift - Terraform](https://spacelift.io/blog/terraform)
+
 # Terraform Books
-- "Terraform: Up & Running, 3nd ed." 2022
-- "Terraform Cookbook" 2023
+- ***"Terraform: Up & Running, 3nd ed." 2022
+- "Terraform Cookbook" 2023-Early Release, use prev.
 - "Terraform in Action" 2021
 - "Practical GitOps: Infra. management using Terraform, AWS, and GitHub Actions" 2022

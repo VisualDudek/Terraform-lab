@@ -205,6 +205,11 @@ ISSUE: A backend block cannot refer to named values (like input vars., locals, o
 
 NOTE: If you change/update backend block you will need to reconfigure or migrate
 
+### Task 3 Configure `tflint`
+- add `.tflint.hcl` file with terraform plugin set to "all" by defult "recommended" -> ~~will produce much more warnings and notices~~ NOPE: will enable "terraform_standard_module_structure" that is not by redult in "recommended" preset, rule will only warn e.g. output blocks slould be included in output.tf file. For full scan use `--recursive` flag or setup config to check also modules by defult.  [see tflint docs](https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.2.0/docs/rules/README.md)
+
+
+
 ---
 # MORT
 
