@@ -26,11 +26,6 @@ provider "aws" {
   }
 }
 
-# -- Task 1 ---
-data "aws_ssm_parameter" "s3_bucket_name" {
-  name = "TerraformS3"
-}
-# --- ----
 
 
 locals {
