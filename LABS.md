@@ -191,7 +191,19 @@ use res. `random_shuffle` inside custom module
 ---
 # Lab - BP training Backend
 - S3 + DynamoDB, DynamoDB is optional, will enable lock
+NOTE: check cfn-templates (my GitHub repo) for `s3-terrform-lock` stack
 
+## Tasks
+
+### Task 1 Get S3 bucket name
+- import bucket name from parameter store NOPE: will not use it
+
+### Task 2 Configure S3 Backend
+- add `backend` block, use s3 bucket name ~~from ssm~~ NOPE: see below
+
+ISSUE: A backend block cannot refer to named values (like input vars., locals, or data source attributes.) -> cannot import bucket name from parameter store.
+
+NOTE: If you change/update backend block you will need to reconfigure or migrate
 
 ---
 # MORT
