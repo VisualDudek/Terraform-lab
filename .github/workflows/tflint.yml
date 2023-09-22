@@ -21,4 +21,4 @@ jobs:
       run: tflint --version
 
     - name: Run TFLint
-      run: tflint -f compact
+      run: tflint -f compact --chdir=./Labs/BP_training_backend
